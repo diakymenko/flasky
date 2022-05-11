@@ -7,16 +7,23 @@ class Cat(db.Model):
   breed = db.Column(db.String)
   age = db.Column(db.Integer)
   toe_beans = db.Column(db.Integer, default=16)
+  caretaker_id = db.Column(db.Integer, db.ForeignKey('caretaker.id'))
+  caretaker = db.relationship("Caretaker", back_populates="cats")
 
   def to_json(self):
-        return {
+    cat_dict = { 
             "id": self.id,
             "name": self.name,
             "personality": self.personality,
             "breed": self.breed,
             "age": self.age,
             "toe_beans": self.toe_beans
-        }
+            }
+
+    if self.caretaker:
+      cat_dict["caretaker_name"] = self.caretaker.name
+
+    return cat_dict
   
   def update(self,req_body):
     self.name = req_body["name"]
