@@ -109,6 +109,14 @@ def update_cat_with_id(cat_id):
     db.session.commit()
     return jsonify(cat.to_dict())
 
+@bp.route("/<cat_id>/pet", methods=["PATCH"])
+def pet_cat_with_id(cat_id):
+    cat = get_cat_record_by_id(cat_id)
+    cat.pet_count += 1
+
+    db.session.commit()
+    return jsonify(cat.to_dict())
+
 # Helper function to get a cat from the database
 def get_cat_record_by_id(id):
     try:

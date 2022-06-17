@@ -5,6 +5,7 @@ class Cat(db.Model):
     name = db.Column(db.String, nullable=False)
     color = db.Column(db.String, nullable=False)
     personality = db.Column(db.String, nullable=False)
+    pet_count = db.Column(db.Integer, nullable=False)
     caretaker_id = db.Column(db.Integer, db.ForeignKey('caretaker.id'))
     caretaker = db.relationship("Caretaker", back_populates="cats")
 
@@ -16,6 +17,7 @@ class Cat(db.Model):
             name=self.name,
             color=self.color,
             personality=self.personality,
+            pet_count=self.pet_count,
             caretaker=caretaker_name,
         )
 
@@ -25,10 +27,12 @@ class Cat(db.Model):
             name=data_dict["name"],
             color=data_dict["color"],
             personality=data_dict["personality"],
+            pet_count=data_dict["pet_count"],
             )
 
     def replace_details(self, data_dict):
         self.name = data_dict["name"]
         self.personality = data_dict["personality"]
         self.color = data_dict["color"]
+        self.pet_count = data_dict["pet_count"]
 
