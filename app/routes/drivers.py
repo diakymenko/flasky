@@ -93,6 +93,24 @@ def add_cars_to_driver(driver_id):
     db.session.commit()
 
     return jsonify({'msg':f"Added cars to driver {driver_id}"}), 200
+
+
+@drivers_bp.route("/<driver_id>", methods=["DELETE"])
+def delete_one_driver(driver_id):
+    try:
+        driver_id = int(driver_id)
+    except ValueError:
+        return jsonify({'msg': f"Invalid driver id: '{driver_id}'. ID must be an integer"}), 400
+
+    chosen_driver = Driver.query.get(driver_id)
+
+    if chosen_driver is None:
+        return jsonify({'msg': f'Could not find driver with id {driver_id}'}), 404
+
+    db.session.delete(chosen_driver)
+    db.session.commit()
+
+    return jsonify({'msg': f'Deleted driver with id {driver_id}'})
     
 
     
