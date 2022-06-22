@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, abort, make_response, request
 from ..models.cat import Cat
 from app import db
 from .routes_helper import error_message
+from time import sleep
 
 # class Cat:
 #     def __init__(self, id, name, color, personality):
@@ -59,7 +60,7 @@ def index_cats():
     if color_param:
         cats = Cat.query.filter_by(color=color_param)
     else:
-        cats = Cat.query.all()
+        cats = Cat.query.order_by("id").all()
 
     result_list = [cat.to_dict() for cat in cats]
 
@@ -115,6 +116,10 @@ def pet_cat_with_id(cat_id):
     cat.pet_count += 1
 
     db.session.commit()
+
+    # add a sleep to see potential effects of network congestion
+    # sleep(3)
+
     return jsonify(cat.to_dict())
 
 # Helper function to get a cat from the database
