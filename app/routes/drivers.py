@@ -97,15 +97,7 @@ def add_cars_to_driver(driver_id):
 
 @drivers_bp.route("/<driver_id>", methods=["DELETE"])
 def delete_one_driver(driver_id):
-    try:
-        driver_id = int(driver_id)
-    except ValueError:
-        return jsonify({'msg': f"Invalid driver id: '{driver_id}'. ID must be an integer"}), 400
-
-    chosen_driver = Driver.query.get(driver_id)
-
-    if chosen_driver is None:
-        return jsonify({'msg': f'Could not find driver with id {driver_id}'}), 404
+    chosen_driver = get_one_driver_or_abort(driver_id)
 
     db.session.delete(chosen_driver)
     db.session.commit()
@@ -113,4 +105,10 @@ def delete_one_driver(driver_id):
     return jsonify({'msg': f'Deleted driver with id {driver_id}'})
     
 
-    
+@drivers_bp.route("/<driver_id>/fliphandsome", methods=["PATCH"])
+def flip_driver_handsomeness_with_id(driver_id):
+    driver = get_one_driver_or_abort(driver_id)
+    driver.handsome = not driver.handsome
+
+    db.session.commit()
+    return jsonify({'msg': f'Flipped driver handsomeness with id {driver_id} to {driver.handsome}'})
