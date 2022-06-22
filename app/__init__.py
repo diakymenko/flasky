@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from dotenv import load_dotenv
@@ -11,6 +12,7 @@ load_dotenv()
 def create_app(testing = None):
     # __name__ stores the name of the module we're in
     app = Flask(__name__)
+    CORS(app)
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     if testing is None:
@@ -30,5 +32,6 @@ def create_app(testing = None):
 
     from .routes.humans import humans_bp
     app.register_blueprint(humans_bp)
+
 
     return app

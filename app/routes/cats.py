@@ -9,7 +9,8 @@ def create_one_cat():
     request_body = request.get_json()
     new_cat = Cat(name=request_body["name"],
                   age=request_body["age"],
-                  color=request_body["color"])
+                  color=request_body["color"],
+                  saying=request_body["saying"])
     db.session.add(new_cat)
     db.session.commit()
     return {
@@ -38,7 +39,8 @@ def get_all_cats():
             'id': cat.id,
             'name': cat.name,
             'age': cat.age,
-            'color': cat.color
+            'color': cat.color,
+            'saying':cat.saying
         })
     return jsonify(cats_response)
 
@@ -64,7 +66,8 @@ def get_one_cat(cat_id):
         'id': chosen_cat.id,
         'name': chosen_cat.name,
         'age': chosen_cat.age,
-        'color': chosen_cat.color
+        'color': chosen_cat.color,
+        'saying':chosen_cat.saying
     }
     return jsonify(rsp), 200
 
@@ -77,6 +80,7 @@ def put_one_cat(cat_id):
         chosen_cat.name = request_body["name"]
         chosen_cat.age = request_body["age"]
         chosen_cat.color = request_body["color"]
+        chosen_cat.saying = request_body["saying"]
     except KeyError:
         return {
             "msg": "name, age, and color are required"
