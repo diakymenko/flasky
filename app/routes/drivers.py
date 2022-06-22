@@ -29,7 +29,7 @@ def create_driver():
 @drivers_bp.route("", methods=["GET"])
 def get_all_drivers():
     response = []
-    drivers = Driver.query.all()
+    drivers = Driver.query.order_by(Driver.id).all()
     for driver in drivers:
         response.append(
             driver.to_dict()
